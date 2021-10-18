@@ -6,4 +6,10 @@ module.exports = {
             presets: ["@babel/preset-react"],
         },
     },
+    "unicorn/filename-case": [
+        "error",
+        {
+            case: "camelCase",
+        },
+    ],
 };
