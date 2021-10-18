@@ -31,7 +31,8 @@
     "husky": "^7.0.2",
     "lint-staged": "^11.2.3",
     "parcel-bundler": "^1.12.5",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "sass": "^1.43.2"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

@@ -29578,8 +29578,11 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function Timer() {
-  return /*#__PURE__*/_react.default.createElement("div", null);
+function Timer(_ref) {
+  var seconds = _ref.seconds;
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "timer"
+  }, seconds);
 }
 },{"react":"../node_modules/react/index.js"}],"../node_modules/@fortawesome/fontawesome-svg-core/index.es.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -40491,51 +40494,122 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-var Controls = function Controls() {
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var Controls = function Controls(_ref) {
+  var handlePlay = _ref.handlePlay,
+      handleReset = _ref.handleReset,
+      timerBool = _ref.timerBool;
+
+  //icons
   var play = /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: _freeSolidSvgIcons.faPlay
   });
 
+  var pause = /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: _freeSolidSvgIcons.faPause
+  });
+
+  var handlePlayOrPause = function handlePlayOrPause() {
+    if (timerBool) {
+      return pause;
+    } else {
+      return play;
+    }
+  };
+
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "controls"
   }, /*#__PURE__*/_react.default.createElement("button", {
-    type: "submit"
-  }, play));
+    onClick: handlePlay
+  }, handlePlayOrPause()), /*#__PURE__*/_react.default.createElement("button", {
+    onClick: handleReset
+  }, "reset"));
 };
 
 var _default = Controls;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@fortawesome/react-fontawesome":"../node_modules/@fortawesome/react-fontawesome/index.es.js","@fortawesome/free-solid-svg-icons":"../node_modules/@fortawesome/free-solid-svg-icons/index.es.js"}],"components/Pomodoro.js":[function(require,module,exports) {
-"use strict";
+},{"react":"../node_modules/react/index.js","@fortawesome/react-fontawesome":"../node_modules/@fortawesome/react-fontawesome/index.es.js","@fortawesome/free-solid-svg-icons":"../node_modules/@fortawesome/free-solid-svg-icons/index.es.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
 
-var _react = _interopRequireDefault(require("react"));
-
-var _Timer = _interopRequireDefault(require("./Timer"));
-
-var _Controls = _interopRequireDefault(require("./Controls"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Pomodoro() {
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_Timer.default, null), /*#__PURE__*/_react.default.createElement(_Controls.default, null));
+  return bundleURL;
 }
 
-var _default = Pomodoro;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","./Timer":"components/Timer.js","./Controls":"components/Controls.js"}],"App.js":[function(require,module,exports) {
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"scss/app.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -40543,21 +40617,110 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
-var _Pomodoro = _interopRequireDefault(require("./components/Pomodoro"));
+var _Timer = _interopRequireDefault(require("./components/Timer"));
+
+var _Controls = _interopRequireDefault(require("./components/Controls"));
+
+require("./scss/app.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function App() {
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", null, "coucou Coco"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/_react.default.createElement(_Pomodoro.default, null)));
+  var _useState = (0, _react.useState)(1500),
+      _useState2 = _slicedToArray(_useState, 2),
+      seconds = _useState2[0],
+      setSeconds = _useState2[1]; //definir une variable seconds (avec react le fait de devoir utliser une constante fait que l'on peut utiliser le setVariable pour modifier cette valeur en cours d'éxécution, tant qu'on définit useState(valeur))
+
+
+  var _useState3 = (0, _react.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      timerBool = _useState4[0],
+      setTimerBool = _useState4[1];
+
+  (0, _react.useEffect)(function () {
+    //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
+    if (timerBool) {
+      // si timerBool est = true exécute le reste
+      if (seconds > 0) {
+        //si les secondes sont superieurs à 0 éxécute le reste
+        setTimeout(function () {
+          return setSeconds(seconds - 1);
+        }, 1000); //setTimeout est que fonction qui va executer une meme 'phrase' en boucle toutes les x (ici 1000) miliseconds
+      } else {
+        // si timerBool est = false exécute autre chose
+        setSeconds('Break Done'); // définit les secondes avec une mutation en string pour que ça affiche "done"
+      }
+    }
+  });
+
+  function fancyTimeFormat(duration) {
+    // Hours, minutes and seconds
+    var hrs = ~~(duration / 3600); // ~~ = math.floor
+
+    var mins = ~~(duration % 3600 / 60);
+    var secs = ~~duration % 60; // Output like "1:01" or "4:03:59" or "123:03:59"
+
+    var ret = "";
+
+    if (hrs > 0) {
+      ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+  }
+
+  var handlePlay = function handlePlay() {
+    //element de logic utilisé pour définir quand l'était de l'app est sur play ou pause (pour le timer et l'affichage des boutons par exemple)
+    if (timerBool) {
+      //si timerBool est = true exécute le reste
+      setTimerBool(false); //met timerBool sur false (c'est un peu un interrupeur)
+    } else {
+      // si timerBool est false éxécute autre chose
+      setTimerBool(true); //met timerBool sur true (c'est un peu un interrupeur)
+    }
+  };
+
+  var handleReset = function handleReset() {
+    //fonction qui s'éxécute quand on appuie sur le bouton reset
+    setSeconds(1500); //remet le compte à 1500
+
+    setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
+  };
+
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "pomodoro"
+  }, /*#__PURE__*/_react.default.createElement(_Timer.default, {
+    seconds: fancyTimeFormat(seconds)
+  }), /*#__PURE__*/_react.default.createElement(_Controls.default, {
+    timerBool: timerBool,
+    handlePlay: handlePlay,
+    handleReset: handleReset
+  }));
 }
 
 var _default = App;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./components/Pomodoro":"components/Pomodoro.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./components/Timer":"components/Timer.js","./components/Controls":"components/Controls.js","./scss/app.scss":"scss/app.scss"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -40597,7 +40760,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56213" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59010" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

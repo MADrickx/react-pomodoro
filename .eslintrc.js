@@ -3,13 +3,13 @@ module.exports = {
     parser: "@babel/eslint-parser",
     parserOptions: {
         babelOptions: {
-            presets: ["@babel/preset-react"],
+            presets: ["@babel/preset-react,@babel/preset-env"],
         },
     },
     "unicorn/filename-case": [
         "error",
         {
-            case: "camelCase",
+            case: "camelCase"
         },
     ],
 };
