@@ -29566,7 +29566,24 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/react-circular-progressbar/dist/index.esm.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"components/Header.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Header;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Header() {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "header"
+  }, /*#__PURE__*/_react.default.createElement("h1", null, "iPomodoro"));
+}
+},{"react":"../node_modules/react/index.js"}],"../node_modules/react-circular-progressbar/dist/index.esm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29896,9 +29913,12 @@ function RoundBar(_ref) {
       fancyTimeFormat = _ref.fancyTimeFormat,
       timerBool = _ref.timerBool,
       timer = _ref.timer,
-      setTimer = _ref.setTimer;
+      setTimer = _ref.setTimer,
+      setSeconds = _ref.setSeconds,
+      timeSetter = _ref.timeSetter;
 
-  var _useState = (0, _react.useState)(1500),
+  // eslint-disable-next-line no-unused-vars
+  var _useState = (0, _react.useState)(timeSetter),
       _useState2 = _slicedToArray(_useState, 2),
       maxTime = _useState2[0],
       setMaxTime = _useState2[1];
@@ -29916,30 +29936,30 @@ function RoundBar(_ref) {
         }
       } else {
         // si timerBool est = false exécute autre chose
-        setSeconds('Break Done'); // définit les secondes avec une mutation en string pour que ça affiche "break done"
+        setSeconds("Break Done"); // définit les secondes avec une mutation en string pour que ça affiche "break done"
       }
     }
   });
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
     className: "roundBar"
   }, /*#__PURE__*/_react.default.createElement(_reactCircularProgressbar.CircularProgressbar, {
-    value: timer,
-    maxValue: TotalSeconds - seconds,
+    value: timer + 1,
+    maxValue: seconds,
     text: fancyTimeFormat(seconds),
     styles: (0, _reactCircularProgressbar.buildStyles)({
       // Rotation of path and trail, in number of turns (0-1)
       rotation: 0,
       // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-      strokeLinecap: 'round',
+      strokeLinecap: "round",
       // Text size
-      textSize: '10px',
+      textSize: "10px",
       // How long animation takes to go from one seconds to another, in seconds
       pathTransitionDuration: 0.5,
       // Colors
       pathColor: "#f88",
-      textColor: '#f88',
-      trailColor: '#d6d6d6',
-      backgroundColor: '#f88'
+      textColor: "#f88",
+      trailColor: "#d6d6d6",
+      backgroundColor: "#f88"
     })
   })));
 }
@@ -29962,7 +29982,8 @@ function Timer(_ref) {
       fancyTimeFormat = _ref.fancyTimeFormat,
       timerBool = _ref.timerBool,
       timer = _ref.timer,
-      setTimer = _ref.setTimer;
+      setTimer = _ref.setTimer,
+      timeSetter = _ref.timeSetter;
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "timer"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -29972,7 +29993,8 @@ function Timer(_ref) {
     setTimer: setTimer,
     timerBool: timerBool,
     seconds: seconds,
-    fancyTimeFormat: fancyTimeFormat
+    fancyTimeFormat: fancyTimeFormat,
+    timeSetter: timeSetter
   })));
 }
 },{"react":"../node_modules/react/index.js","./RoundBar":"components/RoundBar.js"}],"../node_modules/@fortawesome/fontawesome-svg-core/index.es.js":[function(require,module,exports) {
@@ -40885,19 +40907,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Controls = function Controls(_ref) {
   var handlePlay = _ref.handlePlay,
       handleReset = _ref.handleReset,
+      handlePlus = _ref.handlePlus,
+      handleMinus = _ref.handleMinus,
       timerBool = _ref.timerBool;
 
   //icons
@@ -40909,26 +40931,82 @@ var Controls = function Controls(_ref) {
     icon: _freeSolidSvgIcons.faPause
   });
 
+  var redo = /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: _freeSolidSvgIcons.faRedo
+  });
+
+  var plus = /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: _freeSolidSvgIcons.faPlus
+  });
+
+  var minus = /*#__PURE__*/_react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+    icon: _freeSolidSvgIcons.faMinus
+  });
+
   var handlePlayOrPause = function handlePlayOrPause() {
     if (timerBool) {
       return pause;
-    } else {
-      return play;
     }
+
+    return play;
   };
 
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "controls"
   }, /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
     onClick: handlePlay
   }, handlePlayOrPause()), /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
     onClick: handleReset
-  }, "reset"));
+  }, redo), /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: handlePlus
+  }, plus), /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: handleMinus
+  }, minus));
 };
 
 var _default = Controls;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@fortawesome/react-fontawesome":"../node_modules/@fortawesome/react-fontawesome/index.es.js","@fortawesome/free-solid-svg-icons":"../node_modules/@fortawesome/free-solid-svg-icons/index.es.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@fortawesome/react-fontawesome":"../node_modules/@fortawesome/react-fontawesome/index.es.js","@fortawesome/free-solid-svg-icons":"../node_modules/@fortawesome/free-solid-svg-icons/index.es.js"}],"components/TimeChooser.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var TimeChooser = function TimeChooser(_ref) {
+  var handleTimeChange = _ref.handleTimeChange;
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+    className: "timeChooser"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: function onClick() {
+      handleTimeChange(25);
+    }
+  }, 25), /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: function onClick() {
+      handleTimeChange(15);
+    }
+  }, 15), /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: function onClick() {
+      handleTimeChange(5);
+    }
+  }, 5)));
+};
+
+var _default = TimeChooser;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -41010,9 +41088,13 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _Header = _interopRequireDefault(require("./components/Header"));
+
 var _Timer = _interopRequireDefault(require("./components/Timer"));
 
 var _Controls = _interopRequireDefault(require("./components/Controls"));
+
+var _TimeChooser = _interopRequireDefault(require("./components/TimeChooser"));
 
 require("./scss/app.scss");
 
@@ -41035,23 +41117,29 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function App() {
+  // eslint-disable-next-line no-unused-vars
   var _useState = (0, _react.useState)(1500),
       _useState2 = _slicedToArray(_useState, 2),
-      seconds = _useState2[0],
-      setSeconds = _useState2[1]; //definir une variable seconds (avec react le fait de devoir utliser une constante fait que l'on peut utiliser le setVariable pour modifier cette valeur en cours d'éxécution, tant qu'on définit useState(valeur))
+      timeSetter = _useState2[0],
+      setTimeSetter = _useState2[1];
 
-
-  var _useState3 = (0, _react.useState)(false),
+  var _useState3 = (0, _react.useState)(timeSetter),
       _useState4 = _slicedToArray(_useState3, 2),
-      timerBool = _useState4[0],
-      setTimerBool = _useState4[1];
+      seconds = _useState4[0],
+      setSeconds = _useState4[1]; //definir une variable seconds (avec react le fait de devoir utliser une constante fait que l'on peut utiliser le setVariable pour modifier cette valeur en cours d'éxécution, tant qu'on définit useState(valeur))
 
-  var _useState5 = (0, _react.useState)(0),
+
+  var _useState5 = (0, _react.useState)(false),
       _useState6 = _slicedToArray(_useState5, 2),
-      timer = _useState6[0],
-      setTimer = _useState6[1];
+      timerBool = _useState6[0],
+      setTimerBool = _useState6[1];
 
-  var timerLoop = '';
+  var _useState7 = (0, _react.useState)(0),
+      _useState8 = _slicedToArray(_useState7, 2),
+      timer = _useState8[0],
+      setTimer = _useState8[1];
+
+  var timerLoop = "";
   (0, _react.useEffect)(function () {
     //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
     if (timerBool) {
@@ -41063,10 +41151,16 @@ function App() {
         }, 1000); //setTimeout est que fonction qui va executer une meme 'phrase' en boucle toutes les x (ici 1000) miliseconds
       } else {
         // si timerBool est = false exécute autre chose
-        setSeconds('Break Done'); // définit les secondes avec une mutation en string pour que ça affiche "break done"
+        setSeconds("Break Done"); // définit les secondes avec une mutation en string pour que ça affiche "break done"
       }
     }
   });
+
+  var handleTimeChange = function handleTimeChange(time) {
+    var toUse = time * 60;
+    setTimeSetter(toUse);
+    setSeconds(toUse);
+  };
 
   function fancyTimeFormat(duration) {
     var hrs = ~~(duration / 3600); // ~~ = math.floor
@@ -41076,52 +41170,75 @@ function App() {
     var format = "";
 
     if (hrs > 0) {
-      format += "" + hrs + ":" + (mins < 10 ? "0" : "");
+      format += "".concat(hrs, ":").concat(mins < 10 ? "0" : "");
     }
 
-    format += "" + mins + ":" + (secs < 10 ? "0" : "");
-    format += "" + secs;
+    format += "".concat(mins, ":").concat(secs < 10 ? "0" : "");
+    format += "".concat(secs);
     return format;
   }
 
   var handlePlay = function handlePlay() {
     //element de logic utilisé pour définir quand l'était de l'app est sur play ou pause (pour le timer et l'affichage des boutons par exemple)
-    // if (timerBool){//si timerBool est = true exécute le reste
-    //     setTimerBool(false) //met timerBool sur false (c'est un peu un interrupeur)
-    // } else { // si timerBool est false éxécute autre chose
-    //     setTimerBool(true) //met timerBool sur true (c'est un peu un interrupeur)
-    // }
     setTimerBool(!timerBool);
+
+    if (timerBool === true) {
+      clearTimeout(timerLoop);
+      setTimerBool(!timerBool);
+    }
   };
 
   var handleReset = function handleReset() {
     //fonction qui s'éxécute quand on appuie sur le bouton reset
     clearTimeout(timerLoop);
-    setSeconds(1500); //remet le compte à 1500
+    setSeconds(timeSetter); //remet le compte à timeSetter
 
     setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
 
     setTimer(0);
   };
 
-  return /*#__PURE__*/_react.default.createElement("div", {
+  var handlePlus = function handlePlus() {
+    clearTimeout(timerLoop);
+    setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
+
+    setTimer(0);
+    setSeconds(seconds + 60);
+  };
+
+  var handleMinus = function handleMinus() {
+    clearTimeout(timerLoop);
+    setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
+
+    setTimer(0);
+    setSeconds(seconds - 60);
+  };
+
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_Header.default, null), /*#__PURE__*/_react.default.createElement("div", {
     className: "pomodoro"
-  }, /*#__PURE__*/_react.default.createElement(_Timer.default, {
+  }, /*#__PURE__*/_react.default.createElement(_TimeChooser.default, {
+    handleTimeChange: handleTimeChange,
+    timeSetter: timeSetter,
+    setTimeSetter: setTimeSetter
+  }), /*#__PURE__*/_react.default.createElement(_Timer.default, {
     seconds: seconds,
     timer: timer,
     setTimer: setTimer,
     fancyTimeFormat: fancyTimeFormat,
-    timerBool: timerBool
+    timerBool: timerBool,
+    timeSetter: timeSetter
   }), /*#__PURE__*/_react.default.createElement(_Controls.default, {
     timerBool: timerBool,
     handlePlay: handlePlay,
-    handleReset: handleReset
-  }));
+    handleReset: handleReset,
+    handlePlus: handlePlus,
+    handleMinus: handleMinus
+  })));
 }
 
 var _default = App;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./components/Timer":"components/Timer.js","./components/Controls":"components/Controls.js","./scss/app.scss":"scss/app.scss"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./components/Header":"components/Header.js","./components/Timer":"components/Timer.js","./components/Controls":"components/Controls.js","./components/TimeChooser":"components/TimeChooser.js","./scss/app.scss":"scss/app.scss"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -41161,7 +41278,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63593" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52090" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

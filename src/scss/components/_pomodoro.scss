@@ -1,11 +1,14 @@
 .pomodoro{
     width: 50%;
-    height: 50vh;
     border-radius: 15px;
     margin: auto;
-    margin-top: 25vh;
+    margin-top: 4.5rem;
     background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    box-shadow: -6px -6px 14px rgb(231, 231, 231),
+                    -6px -6px 10px rgba(255, 255, 255, .5),
+                    6px 6px 8px rgba(255, 255, 255, .075),
+                    6px 6px 10px rgba(0, 0, 0, .15);
 }
