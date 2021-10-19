@@ -29566,7 +29566,384 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"components/Timer.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/react-circular-progressbar/dist/index.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CircularProgressbar = void 0;
+exports.CircularProgressbarWithChildren = CircularProgressbarWithChildren;
+exports.buildStyles = buildStyles;
+
+var _react = require("react");
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+/* global Reflect, Promise */
+var extendStatics = function (d, b) {
+  extendStatics = Object.setPrototypeOf || {
+    __proto__: []
+  } instanceof Array && function (d, b) {
+    d.__proto__ = b;
+  } || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+  };
+
+  return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+  extendStatics(d, b);
+
+  function __() {
+    this.constructor = d;
+  }
+
+  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function () {
+  __assign = Object.assign || function __assign(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+function __rest(s, e) {
+  var t = {};
+
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+  return t;
+}
+
+var VIEWBOX_WIDTH = 100;
+var VIEWBOX_HEIGHT = 100;
+var VIEWBOX_HEIGHT_HALF = 50;
+var VIEWBOX_CENTER_X = 50;
+var VIEWBOX_CENTER_Y = 50;
+
+function Path(_a) {
+  var className = _a.className,
+      counterClockwise = _a.counterClockwise,
+      dashRatio = _a.dashRatio,
+      pathRadius = _a.pathRadius,
+      strokeWidth = _a.strokeWidth,
+      style = _a.style;
+  return (0, _react.createElement)("path", {
+    className: className,
+    style: Object.assign({}, style, getDashStyle({
+      pathRadius: pathRadius,
+      dashRatio: dashRatio,
+      counterClockwise: counterClockwise
+    })),
+    d: getPathDescription({
+      pathRadius: pathRadius,
+      counterClockwise: counterClockwise
+    }),
+    strokeWidth: strokeWidth,
+    fillOpacity: 0
+  });
+}
+
+function getPathDescription(_a) {
+  var pathRadius = _a.pathRadius,
+      counterClockwise = _a.counterClockwise;
+  var radius = pathRadius;
+  var rotation = counterClockwise ? 1 : 0;
+  return "\n      M " + VIEWBOX_CENTER_X + "," + VIEWBOX_CENTER_Y + "\n      m 0,-" + radius + "\n      a " + radius + "," + radius + " " + rotation + " 1 1 0," + 2 * radius + "\n      a " + radius + "," + radius + " " + rotation + " 1 1 0,-" + 2 * radius + "\n    ";
+}
+
+function getDashStyle(_a) {
+  var counterClockwise = _a.counterClockwise,
+      dashRatio = _a.dashRatio,
+      pathRadius = _a.pathRadius;
+  var diameter = Math.PI * 2 * pathRadius;
+  var gapLength = (1 - dashRatio) * diameter;
+  return {
+    strokeDasharray: diameter + "px " + diameter + "px",
+    strokeDashoffset: (counterClockwise ? -gapLength : gapLength) + "px"
+  };
+}
+
+var CircularProgressbar = function (_super) {
+  __extends(CircularProgressbar, _super);
+
+  function CircularProgressbar() {
+    return _super !== null && _super.apply(this, arguments) || this;
+  }
+
+  CircularProgressbar.prototype.getBackgroundPadding = function () {
+    if (!this.props.background) {
+      return 0;
+    }
+
+    return this.props.backgroundPadding;
+  };
+
+  CircularProgressbar.prototype.getPathRadius = function () {
+    return VIEWBOX_HEIGHT_HALF - this.props.strokeWidth / 2 - this.getBackgroundPadding();
+  };
+
+  CircularProgressbar.prototype.getPathRatio = function () {
+    var _a = this.props,
+        value = _a.value,
+        minValue = _a.minValue,
+        maxValue = _a.maxValue;
+    var boundedValue = Math.min(Math.max(value, minValue), maxValue);
+    return (boundedValue - minValue) / (maxValue - minValue);
+  };
+
+  CircularProgressbar.prototype.render = function () {
+    var _a = this.props,
+        circleRatio = _a.circleRatio,
+        className = _a.className,
+        classes = _a.classes,
+        counterClockwise = _a.counterClockwise,
+        styles = _a.styles,
+        strokeWidth = _a.strokeWidth,
+        text = _a.text;
+    var pathRadius = this.getPathRadius();
+    var pathRatio = this.getPathRatio();
+    return (0, _react.createElement)("svg", {
+      className: classes.root + " " + className,
+      style: styles.root,
+      viewBox: "0 0 " + VIEWBOX_WIDTH + " " + VIEWBOX_HEIGHT,
+      "data-test-id": "CircularProgressbar"
+    }, this.props.background ? (0, _react.createElement)("circle", {
+      className: classes.background,
+      style: styles.background,
+      cx: VIEWBOX_CENTER_X,
+      cy: VIEWBOX_CENTER_Y,
+      r: VIEWBOX_HEIGHT_HALF
+    }) : null, (0, _react.createElement)(Path, {
+      className: classes.trail,
+      counterClockwise: counterClockwise,
+      dashRatio: circleRatio,
+      pathRadius: pathRadius,
+      strokeWidth: strokeWidth,
+      style: styles.trail
+    }), (0, _react.createElement)(Path, {
+      className: classes.path,
+      counterClockwise: counterClockwise,
+      dashRatio: pathRatio * circleRatio,
+      pathRadius: pathRadius,
+      strokeWidth: strokeWidth,
+      style: styles.path
+    }), text ? (0, _react.createElement)("text", {
+      className: classes.text,
+      style: styles.text,
+      x: VIEWBOX_CENTER_X,
+      y: VIEWBOX_CENTER_Y
+    }, text) : null);
+  };
+
+  CircularProgressbar.defaultProps = {
+    background: false,
+    backgroundPadding: 0,
+    circleRatio: 1,
+    classes: {
+      root: 'CircularProgressbar',
+      trail: 'CircularProgressbar-trail',
+      path: 'CircularProgressbar-path',
+      text: 'CircularProgressbar-text',
+      background: 'CircularProgressbar-background'
+    },
+    counterClockwise: false,
+    className: '',
+    maxValue: 100,
+    minValue: 0,
+    strokeWidth: 8,
+    styles: {
+      root: {},
+      trail: {},
+      path: {},
+      text: {},
+      background: {}
+    },
+    text: ''
+  };
+  return CircularProgressbar;
+}(_react.Component);
+
+exports.CircularProgressbar = CircularProgressbar;
+
+function CircularProgressbarWithChildren(props) {
+  var children = props.children,
+      circularProgressbarProps = __rest(props, ["children"]);
+
+  return (0, _react.createElement)("div", {
+    "data-test-id": "CircularProgressbarWithChildren"
+  }, (0, _react.createElement)("div", {
+    style: {
+      position: 'relative',
+      width: '100%',
+      height: '100%'
+    }
+  }, (0, _react.createElement)(CircularProgressbar, __assign({}, circularProgressbarProps)), props.children ? (0, _react.createElement)("div", {
+    "data-test-id": "CircularProgressbarWithChildren__children",
+    style: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      marginTop: '-100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
+  }, props.children) : null));
+}
+
+function buildStyles(_a) {
+  var rotation = _a.rotation,
+      strokeLinecap = _a.strokeLinecap,
+      textColor = _a.textColor,
+      textSize = _a.textSize,
+      pathColor = _a.pathColor,
+      pathTransition = _a.pathTransition,
+      pathTransitionDuration = _a.pathTransitionDuration,
+      trailColor = _a.trailColor,
+      backgroundColor = _a.backgroundColor;
+  var rotationTransform = rotation == null ? undefined : "rotate(" + rotation + "turn)";
+  var rotationTransformOrigin = rotation == null ? undefined : 'center center';
+  return {
+    root: {},
+    path: removeUndefinedValues({
+      stroke: pathColor,
+      strokeLinecap: strokeLinecap,
+      transform: rotationTransform,
+      transformOrigin: rotationTransformOrigin,
+      transition: pathTransition,
+      transitionDuration: pathTransitionDuration == null ? undefined : pathTransitionDuration + "s"
+    }),
+    trail: removeUndefinedValues({
+      stroke: trailColor,
+      strokeLinecap: strokeLinecap,
+      transform: rotationTransform,
+      transformOrigin: rotationTransformOrigin
+    }),
+    text: removeUndefinedValues({
+      fill: textColor,
+      fontSize: textSize
+    }),
+    background: removeUndefinedValues({
+      fill: backgroundColor
+    })
+  };
+}
+
+function removeUndefinedValues(obj) {
+  Object.keys(obj).forEach(function (key) {
+    if (obj[key] == null) {
+      delete obj[key];
+    }
+  });
+  return obj;
+}
+},{"react":"../node_modules/react/index.js"}],"components/RoundBar.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = RoundBar;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactCircularProgressbar = require("react-circular-progressbar");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function RoundBar(_ref) {
+  var seconds = _ref.seconds,
+      fancyTimeFormat = _ref.fancyTimeFormat,
+      timerBool = _ref.timerBool,
+      timer = _ref.timer,
+      setTimer = _ref.setTimer;
+
+  var _useState = (0, _react.useState)(1500),
+      _useState2 = _slicedToArray(_useState, 2),
+      maxTime = _useState2[0],
+      setMaxTime = _useState2[1];
+
+  (0, _react.useEffect)(function () {
+    //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
+    if (timerBool) {
+      // si timerBool est = true exécute le reste
+      if (seconds > 0) {
+        //si les secondes sont superieurs à 0 éxécute le reste
+        if (timer < maxTime) {
+          setTimeout(function () {
+            return setTimer(timer + 1);
+          }, 1000); //setTimeout est que fonction qui va executer un meme code en boucle toutes les x (ici 1000) miliseconds
+        }
+      } else {
+        // si timerBool est = false exécute autre chose
+        setSeconds('Break Done'); // définit les secondes avec une mutation en string pour que ça affiche "break done"
+      }
+    }
+  });
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+    className: "roundBar"
+  }, /*#__PURE__*/_react.default.createElement(_reactCircularProgressbar.CircularProgressbar, {
+    value: timer,
+    maxValue: TotalSeconds - seconds,
+    text: fancyTimeFormat(seconds),
+    styles: (0, _reactCircularProgressbar.buildStyles)({
+      // Rotation of path and trail, in number of turns (0-1)
+      rotation: 0,
+      // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+      strokeLinecap: 'round',
+      // Text size
+      textSize: '10px',
+      // How long animation takes to go from one seconds to another, in seconds
+      pathTransitionDuration: 0.5,
+      // Colors
+      pathColor: "#f88",
+      textColor: '#f88',
+      trailColor: '#d6d6d6',
+      backgroundColor: '#f88'
+    })
+  })));
+}
+},{"react":"../node_modules/react/index.js","react-circular-progressbar":"../node_modules/react-circular-progressbar/dist/index.esm.js"}],"components/Timer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29576,15 +29953,29 @@ exports.default = Timer;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _RoundBar = _interopRequireDefault(require("./RoundBar"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Timer(_ref) {
-  var seconds = _ref.seconds;
+  var seconds = _ref.seconds,
+      fancyTimeFormat = _ref.fancyTimeFormat,
+      timerBool = _ref.timerBool,
+      timer = _ref.timer,
+      setTimer = _ref.setTimer;
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "timer"
-  }, seconds);
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "roundBar__container"
+  }, /*#__PURE__*/_react.default.createElement(_RoundBar.default, {
+    timer: timer,
+    setTimer: setTimer,
+    timerBool: timerBool,
+    seconds: seconds,
+    fancyTimeFormat: fancyTimeFormat
+  })));
 }
-},{"react":"../node_modules/react/index.js"}],"../node_modules/@fortawesome/fontawesome-svg-core/index.es.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./RoundBar":"components/RoundBar.js"}],"../node_modules/@fortawesome/fontawesome-svg-core/index.es.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -40655,62 +41046,72 @@ function App() {
       timerBool = _useState4[0],
       setTimerBool = _useState4[1];
 
+  var _useState5 = (0, _react.useState)(0),
+      _useState6 = _slicedToArray(_useState5, 2),
+      timer = _useState6[0],
+      setTimer = _useState6[1];
+
+  var timerLoop = '';
   (0, _react.useEffect)(function () {
     //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
     if (timerBool) {
       // si timerBool est = true exécute le reste
       if (seconds > 0) {
         //si les secondes sont superieurs à 0 éxécute le reste
-        setTimeout(function () {
+        timerLoop = setTimeout(function () {
           return setSeconds(seconds - 1);
         }, 1000); //setTimeout est que fonction qui va executer une meme 'phrase' en boucle toutes les x (ici 1000) miliseconds
       } else {
         // si timerBool est = false exécute autre chose
-        setSeconds('Break Done'); // définit les secondes avec une mutation en string pour que ça affiche "done"
+        setSeconds('Break Done'); // définit les secondes avec une mutation en string pour que ça affiche "break done"
       }
     }
   });
 
   function fancyTimeFormat(duration) {
-    // Hours, minutes and seconds
     var hrs = ~~(duration / 3600); // ~~ = math.floor
 
     var mins = ~~(duration % 3600 / 60);
-    var secs = ~~duration % 60; // Output like "1:01" or "4:03:59" or "123:03:59"
-
-    var ret = "";
+    var secs = ~~duration % 60;
+    var format = "";
 
     if (hrs > 0) {
-      ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+      format += "" + hrs + ":" + (mins < 10 ? "0" : "");
     }
 
-    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
-    ret += "" + secs;
-    return ret;
+    format += "" + mins + ":" + (secs < 10 ? "0" : "");
+    format += "" + secs;
+    return format;
   }
 
   var handlePlay = function handlePlay() {
     //element de logic utilisé pour définir quand l'était de l'app est sur play ou pause (pour le timer et l'affichage des boutons par exemple)
-    if (timerBool) {
-      //si timerBool est = true exécute le reste
-      setTimerBool(false); //met timerBool sur false (c'est un peu un interrupeur)
-    } else {
-      // si timerBool est false éxécute autre chose
-      setTimerBool(true); //met timerBool sur true (c'est un peu un interrupeur)
-    }
+    // if (timerBool){//si timerBool est = true exécute le reste
+    //     setTimerBool(false) //met timerBool sur false (c'est un peu un interrupeur)
+    // } else { // si timerBool est false éxécute autre chose
+    //     setTimerBool(true) //met timerBool sur true (c'est un peu un interrupeur)
+    // }
+    setTimerBool(!timerBool);
   };
 
   var handleReset = function handleReset() {
     //fonction qui s'éxécute quand on appuie sur le bouton reset
+    clearTimeout(timerLoop);
     setSeconds(1500); //remet le compte à 1500
 
     setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
+
+    setTimer(0);
   };
 
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "pomodoro"
   }, /*#__PURE__*/_react.default.createElement(_Timer.default, {
-    seconds: fancyTimeFormat(seconds)
+    seconds: seconds,
+    timer: timer,
+    setTimer: setTimer,
+    fancyTimeFormat: fancyTimeFormat,
+    timerBool: timerBool
   }), /*#__PURE__*/_react.default.createElement(_Controls.default, {
     timerBool: timerBool,
     handlePlay: handlePlay,
@@ -40760,7 +41161,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59010" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63593" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

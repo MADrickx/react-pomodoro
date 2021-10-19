@@ -1,0 +1,16 @@
+.controls{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    button{
+        padding: 0.5rem;
+        background-color: white;
+        border: 0;
+        border-radius: 7.5px;
+        box-shadow: inset 0px -5px 3px -1px rgba(0,0,0,0.10);
+        &:active{
+            box-shadow: none;
+        }
+    }
+}

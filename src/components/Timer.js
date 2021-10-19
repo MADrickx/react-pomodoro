@@ -1,10 +1,12 @@
 import React from "react";
+import RoundBar from "./RoundBar";
 
-export default function Timer( {seconds} ) {
-
+export default function Timer( {seconds, fancyTimeFormat, timerBool, timer, setTimer} ) {
     return (
         <div className="timer">
-            {seconds}
+            <div className="roundBar__container">
+                <RoundBar timer={timer} setTimer={setTimer} timerBool={timerBool} seconds={seconds} fancyTimeFormat={fancyTimeFormat}/>
+            </div>
         </div>
     )
 }
