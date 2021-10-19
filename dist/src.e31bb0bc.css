@@ -81,6 +81,10 @@ body {
   background-color: black;
   box-shadow: -6px -6px 14px rgba(255, 255, 255, 0.7), -6px -6px 10px rgba(255, 255, 255, 0.5), 6px 6px 8px rgba(255, 255, 255, 0.075), 6px 6px 10px rgba(0, 0, 0, 0.15);
 }
+.header h1 {
+  font-weight: lighter;
+  letter-spacing: 1px;
+}
 
 .timeChooser {
   margin: 1rem 0 0 0;
@@ -111,7 +115,7 @@ body {
 }
 .controls button {
   padding: 1.5em 2em;
-  margin: 0 1rem;
+  margin: 0 3%;
   background: #efefef;
   border: none;
   border-radius: 0.5rem;
@@ -131,7 +135,7 @@ body {
 }
 
 .pomodoro {
-  width: 50%;
+  max-width: 50%;
   border-radius: 15px;
   margin: auto;
   margin-top: 4.5rem;
@@ -142,6 +146,11 @@ body {
   box-shadow: -6px -6px 14px #e7e7e7, -6px -6px 10px rgba(255, 255, 255, 0.5), 6px 6px 8px rgba(255, 255, 255, 0.075), 6px 6px 10px rgba(0, 0, 0, 0.15);
 }
 
+@media screen and (max-width: 850px) {
+  .pomodoro {
+    max-width: 75%;
+  }
+}
 .timer {
   display: flex;
   align-items: center;

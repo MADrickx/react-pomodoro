@@ -50,8 +50,8 @@ export default function RoundBar({
                         pathTransitionDuration: 0.5,
 
                         // Colors
-                        pathColor: `#f88`,
-                        textColor: "#f88",
+                        pathColor: `#000`,
+                        textColor: "#000",
                         trailColor: "#d6d6d6",
                         backgroundColor: "#f88",
                     })}

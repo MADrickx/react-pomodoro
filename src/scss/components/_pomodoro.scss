@@ -1,5 +1,5 @@
 .pomodoro{
-    width: 50%;
+    max-width: 50%;
     border-radius: 15px;
     margin: auto;
     margin-top: 4.5rem;
@@ -11,4 +11,10 @@
                     -6px -6px 10px rgba(255, 255, 255, .5),
                     6px 6px 8px rgba(255, 255, 255, .075),
                     6px 6px 10px rgba(0, 0, 0, .15);
+}
+
+@media screen and (max-width:850px){
+    .pomodoro{
+        max-width: 75%;
+    }
 }

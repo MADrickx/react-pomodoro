@@ -29956,8 +29956,8 @@ function RoundBar(_ref) {
       // How long animation takes to go from one seconds to another, in seconds
       pathTransitionDuration: 0.5,
       // Colors
-      pathColor: "#f88",
-      textColor: "#f88",
+      pathColor: "#000",
+      textColor: "#000",
       trailColor: "#d6d6d6",
       backgroundColor: "#f88"
     })
@@ -41117,7 +41117,6 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function App() {
-  // eslint-disable-next-line no-unused-vars
   var _useState = (0, _react.useState)(1500),
       _useState2 = _slicedToArray(_useState, 2),
       timeSetter = _useState2[0],
@@ -41190,10 +41189,10 @@ function App() {
 
   var handleReset = function handleReset() {
     //fonction qui s'éxécute quand on appuie sur le bouton reset
+    setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
+
     clearTimeout(timerLoop);
     setSeconds(timeSetter); //remet le compte à timeSetter
-
-    setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
 
     setTimer(0);
   };

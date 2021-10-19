@@ -6,7 +6,6 @@ import TimeChooser from "./components/TimeChooser";
 import "./scss/app.scss";
 
 function App() {
-    // eslint-disable-next-line no-unused-vars
     const [timeSetter, setTimeSetter] = useState(1500);
     const [seconds, setSeconds] = useState(timeSetter); //definir une variable seconds (avec react le fait de devoir utliser une constante fait que l'on peut utiliser le setVariable pour modifier cette valeur en cours d'éxécution, tant qu'on définit useState(valeur))
     const [timerBool, setTimerBool] = useState(false);
@@ -60,9 +59,9 @@ function App() {
 
     const handleReset = () => {
         //fonction qui s'éxécute quand on appuie sur le bouton reset
+        setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
         clearTimeout(timerLoop);
         setSeconds(timeSetter); //remet le compte à timeSetter
-        setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
         setTimer(0);
     };
 
