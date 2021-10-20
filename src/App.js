@@ -46,7 +46,7 @@ function App() {
     }
 
     const handlePlay = () => {
-        //element de logic utilisé pour définir quand l'était de l'app est sur play ou pause (pour le timer et l'affichage des boutons par exemple)
+        //element de logic utilisé pour définir quand l'état de l'app est sur play ou pause (pour le timer et l'affichage des boutons par exemple)
         setTimerBool(!timerBool);
 
         if (timerBool === true) {
