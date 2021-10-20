@@ -1,3 +1,9 @@
-.roundBar__container{
-    height: 100%;
+.roundBar__container {
+    width: 40%;
+}
+
+@media screen and (max-width: 750px) {
+    .roundBar__container {
+        width: 80%;
+    }
 }

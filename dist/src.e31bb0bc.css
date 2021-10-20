@@ -134,6 +134,11 @@ body {
   transform: scale(0.98);
 }
 
+@media screen and (max-width: 750px) {
+  .controls button {
+    padding: 1em 1.5em;
+  }
+}
 .pomodoro {
   max-width: 50%;
   border-radius: 15px;
@@ -160,7 +165,13 @@ body {
 }
 
 .roundBar__container {
-  height: 100%;
+  width: 40%;
+}
+
+@media screen and (max-width: 750px) {
+  .roundBar__container {
+    width: 80%;
+  }
 }
 
 /*# sourceMappingURL=/src.e31bb0bc.css.map */
