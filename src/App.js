@@ -4,6 +4,7 @@ import Timer from "./components/Timer";
 import Controls from "./components/Controls";
 import TimeChooser from "./components/TimeChooser";
 import "./scss/app.scss";
+import Modal from "./components/Modal";
 
 function App() {
     const [timeSetter, setTimeSetter] = useState(1500);
@@ -11,7 +12,7 @@ function App() {
     const [timerBool, setTimerBool] = useState(false);
     const [timer, setTimer] = useState(0);
 
-    let timerLoop = "";
+    let timerLoop;
 
     useEffect(() => {
         //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
@@ -20,9 +21,6 @@ function App() {
             if (seconds > 0) {
                 //si les secondes sont superieurs à 0 éxécute le reste
                 timerLoop = setTimeout(() => setSeconds(seconds - 1), 1000); //setTimeout est que fonction qui va executer une meme 'phrase' en boucle toutes les x (ici 1000) miliseconds
-            } else {
-                // si timerBool est = false exécute autre chose
-                setSeconds("Break Done"); // définit les secondes avec une mutation en string pour que ça affiche "break done"
             }
         }
     });
@@ -104,6 +102,7 @@ function App() {
                     handleMinus={handleMinus}
                 />
             </div>
+            <Modal seconds={seconds} handleReset={handleReset} />
         </>
     );
 }

@@ -29914,17 +29914,17 @@ function RoundBar(_ref) {
       timerBool = _ref.timerBool,
       timer = _ref.timer,
       setTimer = _ref.setTimer,
-      setSeconds = _ref.setSeconds,
       timeSetter = _ref.timeSetter;
 
   // eslint-disable-next-line no-unused-vars
-  var _useState = (0, _react.useState)(timeSetter),
+  var _useState = (0, _react.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
       maxTime = _useState2[0],
       setMaxTime = _useState2[1];
 
   (0, _react.useEffect)(function () {
-    //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
+    setMaxTime(timeSetter); //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
+
     if (timerBool) {
       // si timerBool est = true exécute le reste
       if (seconds > 0) {
@@ -29932,11 +29932,8 @@ function RoundBar(_ref) {
         if (timer < maxTime) {
           setTimeout(function () {
             return setTimer(timer + 1);
-          }, 1000); //setTimeout est que fonction qui va executer un meme code en boucle toutes les x (ici 1000) miliseconds
+          }, 1000);
         }
-      } else {
-        // si timerBool est = false exécute autre chose
-        setSeconds("Break Done"); // définit les secondes avec une mutation en string pour que ça affiche "break done"
       }
     }
   });
@@ -29944,7 +29941,7 @@ function RoundBar(_ref) {
     className: "roundBar"
   }, /*#__PURE__*/_react.default.createElement(_reactCircularProgressbar.CircularProgressbar, {
     value: timer + 1,
-    maxValue: seconds,
+    maxValue: maxTime,
     text: fancyTimeFormat(seconds),
     styles: (0, _reactCircularProgressbar.buildStyles)({
       // Rotation of path and trail, in number of turns (0-1)
@@ -41078,7 +41075,46 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"App.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Modal.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Modal;
+
+var _react = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function Modal(_ref) {
+  var seconds = _ref.seconds,
+      handleReset = _ref.handleReset;
+  var modalRef = (0, _react.useRef)(null);
+
+  var handleModalClose = function handleModalClose() {
+    var modalNode = modalRef.current;
+    modalNode.classList.toggle("hidden");
+  };
+
+  return /*#__PURE__*/_react.default.createElement("div", {
+    ref: modalRef,
+    className: "modal ".concat(seconds === 0 ? "" : "hidden")
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "modal__content"
+  }, /*#__PURE__*/_react.default.createElement("h1", null, "Timer's done"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "modal__buttons"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: handleModalClose
+  }, "close"), /*#__PURE__*/_react.default.createElement("button", {
+    type: "button",
+    onClick: handleReset
+  }, "replay"))));
+}
+},{"react":"../node_modules/react/index.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41097,6 +41133,8 @@ var _Controls = _interopRequireDefault(require("./components/Controls"));
 var _TimeChooser = _interopRequireDefault(require("./components/TimeChooser"));
 
 require("./scss/app.scss");
+
+var _Modal = _interopRequireDefault(require("./components/Modal"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41138,7 +41176,7 @@ function App() {
       timer = _useState8[0],
       setTimer = _useState8[1];
 
-  var timerLoop = "";
+  var timerLoop;
   (0, _react.useEffect)(function () {
     //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
     if (timerBool) {
@@ -41148,9 +41186,6 @@ function App() {
         timerLoop = setTimeout(function () {
           return setSeconds(seconds - 1);
         }, 1000); //setTimeout est que fonction qui va executer une meme 'phrase' en boucle toutes les x (ici 1000) miliseconds
-      } else {
-        // si timerBool est = false exécute autre chose
-        setSeconds("Break Done"); // définit les secondes avec une mutation en string pour que ça affiche "break done"
       }
     }
   });
@@ -41232,12 +41267,15 @@ function App() {
     handleReset: handleReset,
     handlePlus: handlePlus,
     handleMinus: handleMinus
-  })));
+  })), /*#__PURE__*/_react.default.createElement(_Modal.default, {
+    seconds: seconds,
+    handleReset: handleReset
+  }));
 }
 
 var _default = App;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./components/Header":"components/Header.js","./components/Timer":"components/Timer.js","./components/Controls":"components/Controls.js","./components/TimeChooser":"components/TimeChooser.js","./scss/app.scss":"scss/app.scss"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./components/Header":"components/Header.js","./components/Timer":"components/Timer.js","./components/Controls":"components/Controls.js","./components/TimeChooser":"components/TimeChooser.js","./scss/app.scss":"scss/app.scss","./components/Modal":"components/Modal.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -41248,7 +41286,7 @@ var _App = _interopRequireDefault(require("./App"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_react.default.StrictMode, null, /*#__PURE__*/_react.default.createElement(_App.default, null)), document.getElementById('root'));
+_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_react.default.StrictMode, null, /*#__PURE__*/_react.default.createElement(_App.default, null)), document.querySelector("#root"));
 },{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./App":"App.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

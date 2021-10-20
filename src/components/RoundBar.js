@@ -7,24 +7,21 @@ export default function RoundBar({
     timerBool,
     timer,
     setTimer,
-    setSeconds,
     timeSetter,
 }) {
     // eslint-disable-next-line no-unused-vars
-    const [maxTime, setMaxTime] = useState(timeSetter);
+    const [maxTime, setMaxTime] = useState(null);
 
     useEffect(() => {
+        setMaxTime(timeSetter);
         //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
         if (timerBool) {
             // si timerBool est = true exécute le reste
             if (seconds > 0) {
                 //si les secondes sont superieurs à 0 éxécute le reste
                 if (timer < maxTime) {
-                    setTimeout(() => setTimer(timer + 1), 1000); //setTimeout est que fonction qui va executer un meme code en boucle toutes les x (ici 1000) miliseconds
+                    setTimeout(() => setTimer(timer + 1), 1000);
                 }
-            } else {
-                // si timerBool est = false exécute autre chose
-                setSeconds("Break Done"); // définit les secondes avec une mutation en string pour que ça affiche "break done"
             }
         }
     });
@@ -34,7 +31,7 @@ export default function RoundBar({
             <div className={"roundBar"}>
                 <CircularProgressbar
                     value={timer + 1}
-                    maxValue={seconds}
+                    maxValue={maxTime}
                     text={fancyTimeFormat(seconds)}
                     styles={buildStyles({
                         // Rotation of path and trail, in number of turns (0-1)
