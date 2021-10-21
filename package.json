@@ -2,10 +2,11 @@
   "name": "react-pomodoro",
   "version": "1.0.0",
   "description": "",
-  "main": ".eslintrc.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel ./src/index.html --open"
+    "start": "parcel ./src/index.html --open",
+    "build": "parcel build ./src/index.html --output-dir"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "eslint-plugin-unicorn": "^37.0.1",
     "husky": "^7.0.2",
     "lint-staged": "^11.2.3",
+    "parcel": "^2.0.0",
     "parcel-bundler": "^1.12.5",
     "prettier": "^2.4.1",
     "sass": "^1.43.2"
@@ -38,6 +40,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
+    "@parcel/transformer-sass": "^2.0.0",
     "app": "^0.1.0",
     "react": "^17.0.2",
     "react-circular-progressbar": "^2.0.4",
