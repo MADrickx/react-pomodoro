@@ -55,15 +55,7 @@ function App() {
         }
     };
 
-    const handleReset = () => {
-        //fonction qui s'éxécute quand on appuie sur le bouton reset
-        clearTimeout(timerLoop);
-        setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
-        setTimer(0);
-        setSeconds(timeSetter); //remet le compte à timeSetter
-    };
-
-    const handleReset2 = useCallback(() => {
+    const handleReset = useCallback(() => {
         clearTimeout(timerLoop);
         setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
         setTimer(0);
@@ -104,7 +96,7 @@ function App() {
                 <Controls
                     timerBool={timerBool}
                     handlePlay={handlePlay}
-                    handleReset2={handleReset2}
+                    handleReset={handleReset}
                     handlePlus={handlePlus}
                     handleMinus={handleMinus}
                 />
