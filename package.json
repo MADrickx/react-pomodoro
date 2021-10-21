@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "default": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel ./src/index.html --open",
-    "build": "parcel build ./src/index.html --output-dir"
+    "build": "parcel build src/index.html"
   },
   "repository": {
     "type": "git",
