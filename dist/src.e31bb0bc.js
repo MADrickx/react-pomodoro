@@ -29880,6 +29880,47 @@ function removeUndefinedValues(obj) {
   });
   return obj;
 }
+},{"react":"../node_modules/react/index.js"}],"../node_modules/use-interval/dist/index.es.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useInterval = exports.default = useInterval;
+
+var _react = require("react");
+
+/* istanbul ignore next */
+
+/** keep typescript happy */
+var noop = function noop() {};
+
+function useInterval(callback, delay, immediate) {
+  var savedCallback = (0, _react.useRef)(noop); // Remember the latest callback.
+
+  (0, _react.useEffect)(function () {
+    savedCallback.current = callback;
+  }); // Execute callback if immediate is set.
+
+  (0, _react.useEffect)(function () {
+    if (!immediate) return;
+    if (delay === null || delay === false) return;
+    savedCallback.current();
+  }, [immediate]); // Set up the interval.
+
+  (0, _react.useEffect)(function () {
+    if (delay === null || delay === false) return undefined;
+
+    var tick = function tick() {
+      return savedCallback.current();
+    };
+
+    var id = setInterval(tick, delay);
+    return function () {
+      return clearInterval(id);
+    };
+  }, [delay]);
+}
 },{"react":"../node_modules/react/index.js"}],"components/RoundBar.js":[function(require,module,exports) {
 "use strict";
 
@@ -29891,6 +29932,10 @@ exports.default = RoundBar;
 var _react = _interopRequireWildcard(require("react"));
 
 var _reactCircularProgressbar = require("react-circular-progressbar");
+
+var _useInterval = _interopRequireDefault(require("use-interval"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -29922,21 +29967,18 @@ function RoundBar(_ref) {
       maxTime = _useState2[0],
       setMaxTime = _useState2[1];
 
-  (0, _react.useEffect)(function () {
-    setMaxTime(timeSetter); //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
+  (0, _useInterval.default)(function () {
+    setMaxTime(timeSetter);
 
     if (timerBool) {
       // si timerBool est = true exécute le reste
       if (seconds > 0) {
-        //si les secondes sont superieurs à 0 éxécute le reste
-        if (timer < maxTime) {
-          setTimeout(function () {
-            return setTimer(timer + 1);
-          }, 1000);
-        }
+        setTimer(timer + 1);
       }
     }
-  });
+
+    return timer;
+  }, 1000);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
     className: "roundBar"
   }, /*#__PURE__*/_react.default.createElement(_reactCircularProgressbar.CircularProgressbar, {
@@ -29947,7 +29989,7 @@ function RoundBar(_ref) {
       // Rotation of path and trail, in number of turns (0-1)
       rotation: 0,
       // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-      strokeLinecap: "round",
+      strokeLinecap: "butt",
       // Text size
       textSize: "10px",
       // How long animation takes to go from one seconds to another, in seconds
@@ -29960,7 +30002,7 @@ function RoundBar(_ref) {
     })
   })));
 }
-},{"react":"../node_modules/react/index.js","react-circular-progressbar":"../node_modules/react-circular-progressbar/dist/index.esm.js"}],"components/Timer.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-circular-progressbar":"../node_modules/react-circular-progressbar/dist/index.esm.js","use-interval":"../node_modules/use-interval/dist/index.es.js"}],"components/Timer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41136,6 +41178,8 @@ require("./scss/app.scss");
 
 var _Modal = _interopRequireDefault(require("./components/Modal"));
 
+var _useInterval = _interopRequireDefault(require("use-interval"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -41177,18 +41221,16 @@ function App() {
       setTimer = _useState8[1];
 
   var timerLoop;
-  (0, _react.useEffect)(function () {
-    //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
+  (0, _useInterval.default)(function () {
     if (timerBool) {
       // si timerBool est = true exécute le reste
       if (seconds > 0) {
-        //si les secondes sont superieurs à 0 éxécute le reste
-        timerLoop = setTimeout(function () {
-          return setSeconds(seconds - 1);
-        }, 1000); //setTimeout est que fonction qui va executer une meme 'phrase' en boucle toutes les x (ici 1000) miliseconds
+        timerLoop = setSeconds(seconds - 1);
       }
     }
-  });
+
+    return seconds;
+  }, 1000);
 
   var handleTimeChange = function handleTimeChange(time) {
     var toUse = time * 60;
@@ -41224,13 +41266,20 @@ function App() {
 
   var handleReset = function handleReset() {
     //fonction qui s'éxécute quand on appuie sur le bouton reset
+    clearTimeout(timerLoop);
     setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
 
-    clearTimeout(timerLoop);
+    setTimer(0);
     setSeconds(timeSetter); //remet le compte à timeSetter
+  };
+
+  var handleReset2 = (0, _react.useCallback)(function () {
+    clearTimeout(timerLoop);
+    setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
 
     setTimer(0);
-  };
+    setSeconds(timeSetter); //remet le compte à timeSetter
+  }, [setSeconds, setTimer, setTimerBool]);
 
   var handlePlus = function handlePlus() {
     clearTimeout(timerLoop);
@@ -41264,7 +41313,7 @@ function App() {
   }), /*#__PURE__*/_react.default.createElement(_Controls.default, {
     timerBool: timerBool,
     handlePlay: handlePlay,
-    handleReset: handleReset,
+    handleReset2: handleReset2,
     handlePlus: handlePlus,
     handleMinus: handleMinus
   })), /*#__PURE__*/_react.default.createElement(_Modal.default, {
@@ -41275,7 +41324,7 @@ function App() {
 
 var _default = App;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./components/Header":"components/Header.js","./components/Timer":"components/Timer.js","./components/Controls":"components/Controls.js","./components/TimeChooser":"components/TimeChooser.js","./scss/app.scss":"scss/app.scss","./components/Modal":"components/Modal.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./components/Header":"components/Header.js","./components/Timer":"components/Timer.js","./components/Controls":"components/Controls.js","./components/TimeChooser":"components/TimeChooser.js","./scss/app.scss":"scss/app.scss","./components/Modal":"components/Modal.js","use-interval":"../node_modules/use-interval/dist/index.es.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -41315,7 +41364,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52148" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63703" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

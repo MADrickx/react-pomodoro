@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useCallback} from "react";
 import Header from "./components/Header";
 import Timer from "./components/Timer";
 import Controls from "./components/Controls";
 import TimeChooser from "./components/TimeChooser";
 import "./scss/app.scss";
 import Modal from "./components/Modal";
+import useInterval from "use-interval";
 
 function App() {
     const [timeSetter, setTimeSetter] = useState(1500);
@@ -14,16 +15,15 @@ function App() {
 
     let timerLoop;
 
-    useEffect(() => {
-        //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
+    useInterval(() => {
         if (timerBool) {
             // si timerBool est = true exécute le reste
             if (seconds > 0) {
-                //si les secondes sont superieurs à 0 éxécute le reste
-                timerLoop = setTimeout(() => setSeconds(seconds - 1), 1000); //setTimeout est que fonction qui va executer une meme 'phrase' en boucle toutes les x (ici 1000) miliseconds
+                timerLoop = setSeconds(seconds - 1);
             }
         }
-    });
+        return seconds;
+    }, 1000);
 
     const handleTimeChange = time => {
         const toUse = time * 60;
@@ -57,11 +57,18 @@ function App() {
 
     const handleReset = () => {
         //fonction qui s'éxécute quand on appuie sur le bouton reset
-        setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
         clearTimeout(timerLoop);
-        setSeconds(timeSetter); //remet le compte à timeSetter
+        setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
         setTimer(0);
+        setSeconds(timeSetter); //remet le compte à timeSetter
     };
+
+    const handleReset2 = useCallback(() => {
+        clearTimeout(timerLoop);
+        setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
+        setTimer(0);
+        setSeconds(timeSetter); //remet le compte à timeSetter
+    }, [setSeconds, setTimer, setTimerBool]);
 
     const handlePlus = () => {
         clearTimeout(timerLoop);
@@ -97,7 +104,7 @@ function App() {
                 <Controls
                     timerBool={timerBool}
                     handlePlay={handlePlay}
-                    handleReset={handleReset}
+                    handleReset2={handleReset2}
                     handlePlus={handlePlus}
                     handleMinus={handleMinus}
                 />

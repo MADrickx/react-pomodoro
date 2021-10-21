@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {CircularProgressbar, buildStyles} from "react-circular-progressbar";
+import useInterval from "use-interval";
 
 export default function RoundBar({
     seconds,
@@ -12,19 +13,16 @@ export default function RoundBar({
     // eslint-disable-next-line no-unused-vars
     const [maxTime, setMaxTime] = useState(null);
 
-    useEffect(() => {
+    useInterval(() => {
         setMaxTime(timeSetter);
-        //hooks de react -> permet d'utiliser une logic spécifique, à chaque changement, une seule fois ou autre
         if (timerBool) {
             // si timerBool est = true exécute le reste
             if (seconds > 0) {
-                //si les secondes sont superieurs à 0 éxécute le reste
-                if (timer < maxTime) {
-                    setTimeout(() => setTimer(timer + 1), 1000);
-                }
+                setTimer(timer + 1);
             }
         }
-    });
+        return timer;
+    }, 1000);
 
     return (
         <>
@@ -38,7 +36,7 @@ export default function RoundBar({
                         rotation: 0,
 
                         // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-                        strokeLinecap: "round",
+                        strokeLinecap: "butt",
 
                         // Text size
                         textSize: "10px",
