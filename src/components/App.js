@@ -60,7 +60,7 @@ function App() {
         setTimerBool(false); // fait pause par l'intermédiaire de handlePlay (notre interrupteur logic)
         setTimer(0);
         setSeconds(timeSetter); //remet le compte à timeSetter
-    }, [setSeconds, setTimer, setTimerBool]);
+    });
 
     const handlePlus = () => {
         clearTimeout(timerLoop);
